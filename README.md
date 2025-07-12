@@ -12,7 +12,7 @@ pantri-iac/
 │   │   ├── variables.tf      # 開発環境の変数定義
 │   │   ├── outputs.tf        # 開発環境の出力値
 │   │   └── terraform.tfvars  # 開発環境の変数値
-│   └── prod/
+│   └── prd/
 │       ├── main.tf           # 本番環境のメイン設定
 │       ├── variables.tf      # 本番環境の変数定義
 │       ├── outputs.tf        # 本番環境の出力値
@@ -51,7 +51,7 @@ pantri-iac/
 
 ### 環境分離
 - **environments/dev/**: 開発環境用の設定（小さなリソース、低コスト）
-- **environments/prod/**: 本番環境用の設定（高可用性、パフォーマンス重視）
+- **environments/prd/**: 本番環境用の設定（高可用性、パフォーマンス重視）
 
 ### モジュール構成
 - **modules/vpc/**: ネットワーク基盤（VPC、サブネット、ルーティング）
@@ -119,7 +119,7 @@ pantri-iac/
    cd environments/dev
    
    # 本番環境の場合
-   cd environments/prod
+   cd environments/prd
    ```
 
 4. **Terraformの初期化**
@@ -169,7 +169,7 @@ terraform apply
 
 ### 本番環境
 ```bash
-cd environments/prod
+cd environments/prd
 terraform init
 terraform plan
 terraform apply

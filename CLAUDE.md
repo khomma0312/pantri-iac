@@ -12,7 +12,7 @@ pantri-iac/
 │   │   ├── variables.tf      # 開発環境の変数定義
 │   │   ├── outputs.tf        # 開発環境の出力値
 │   │   └── terraform.tfvars  # 開発環境の変数値
-│   └── prod/
+│   └── prd/
 │       ├── main.tf           # 本番環境のメイン設定
 │       ├── variables.tf      # 本番環境の変数定義
 │       ├── outputs.tf        # 本番環境の出力値
@@ -179,7 +179,7 @@ aws s3 ls
 ### 開発ワークフロー
 
 #### ローカル開発
-1. 対象環境のディレクトリに移動（`cd environments/dev` または `cd environments/prod`）
+1. 対象環境のディレクトリに移動（`cd environments/dev` または `cd environments/prd`）
 2. Terraformファイルの変更
 3. `terraform plan`で変更内容を確認
 4. `terraform apply`で変更をデプロイ
