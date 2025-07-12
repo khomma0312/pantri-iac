@@ -4,11 +4,10 @@ on:
   pull_request:
     types: [opened, synchronize]
     # Optional: Only run on specific file changes
-    # paths:
-    #   - "src/**/*.ts"
-    #   - "src/**/*.tsx"
-    #   - "src/**/*.js"
-    #   - "src/**/*.jsx"
+    paths:
+      - "environments/**/*.tf"
+      - "modules/**/*.tf"
+      - "**/*.tfvars"
 
 jobs:
   claude-review:
@@ -42,14 +41,16 @@ jobs:
           
           # Direct prompt for automated review (no @claude mention needed)
           direct_prompt: |
-            Please review this pull request and provide feedback on:
-            - Code quality and best practices
-            - Potential bugs or issues
-            - Performance considerations
-            - Security concerns
-            - Test coverage
+            Please review this Terraform infrastructure code pull request and provide feedback on:
+            - Terraform best practices and conventions
+            - Resource configuration and naming
+            - Security concerns (IAM policies, security groups, encryption)
+            - Cost optimization opportunities
+            - Infrastructure reliability and availability
+            - Proper use of variables and locals
+            - Module structure and reusability
             
-            Be constructive and helpful in your feedback.
+            Be constructive and helpful in your feedback, focusing on infrastructure-specific concerns.
 
           # Optional: Use sticky comments to make Claude reuse the same comment on subsequent pushes to the same PR
           # use_sticky_comment: true
@@ -57,10 +58,10 @@ jobs:
           # Optional: Customize review based on file types
           # direct_prompt: |
           #   Review this PR focusing on:
-          #   - For TypeScript files: Type safety and proper interface usage
-          #   - For API endpoints: Security, input validation, and error handling
-          #   - For React components: Performance, accessibility, and best practices
-          #   - For tests: Coverage, edge cases, and test quality
+          #   - For .tf files: Resource configuration, dependencies, and Terraform best practices
+          #   - For .tfvars files: Proper variable values and security considerations
+          #   - For modules: Reusability, input validation, and clear outputs
+          #   - For environments: Environment-specific configurations and consistency
           
           # Optional: Different prompts for different authors
           # direct_prompt: |
@@ -68,8 +69,8 @@ jobs:
           #   'Welcome! Please review this PR from a first-time contributor. Be encouraging and provide detailed explanations for any suggestions.' ||
           #   'Please provide a thorough code review focusing on our coding standards and best practices.' }}
           
-          # Optional: Add specific tools for running tests or linting
-          # allowed_tools: "Bash(npm run test),Bash(npm run lint),Bash(npm run typecheck)"
+          # Optional: Add specific tools for running Terraform validation
+          # allowed_tools: "Bash(terraform fmt -check),Bash(terraform validate)"
           
           # Optional: Skip review for certain conditions
           # if: |

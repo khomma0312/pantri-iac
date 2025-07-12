@@ -50,15 +50,18 @@ jobs:
           # assignee_trigger: "claude-bot"
           
           # Optional: Allow Claude to run specific commands
-          # allowed_tools: "Bash(npm install),Bash(npm run build),Bash(npm run test:*),Bash(npm run lint:*)"
+          # allowed_tools: "Bash(terraform init),Bash(terraform plan),Bash(terraform validate),Bash(terraform fmt),Bash(aws cli commands)"
           
           # Optional: Add custom instructions for Claude to customize its behavior for your project
           # custom_instructions: |
-          #   Follow our coding standards
-          #   Ensure all new code has tests
-          #   Use TypeScript for new files
+          #   Follow Terraform best practices and naming conventions
+          #   Ensure proper resource dependencies and lifecycle management
+          #   Use consistent variable naming across modules
+          #   Follow security best practices for IAM and network configurations
+          #   Consider cost optimization in resource configurations
           
           # Optional: Custom environment variables for Claude
           # claude_env: |
-          #   NODE_ENV: test
+          #   AWS_DEFAULT_REGION: ap-northeast-1
+          #   TF_VAR_environment: dev
 
