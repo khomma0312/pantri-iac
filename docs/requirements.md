@@ -100,29 +100,16 @@
 - [ ] RDSバックアップ
 - [ ] S3バックアップ
 
-### 6. 追加ストレージ
+### 6. 高度な計算リソース
 
-#### Q. EFSモジュール (`modules/storage/efs/`)
-- [ ] EFSファイルシステム
-- [ ] マウントターゲット
-- [ ] アクセスポイント
-
-### 7. 高度な計算リソース
-
-#### R. Lambdaモジュール (`modules/compute/lambda/`)
+#### Q. Lambdaモジュール (`modules/compute/lambda/`)
 - [ ] Lambda関数
 - [ ] Lambda レイヤー
 - [ ] イベントトリガー
 
-#### S. Auto Scalingモジュール (`modules/compute/auto-scaling/`)
+#### R. Auto Scalingモジュール (`modules/compute/auto-scaling/`)
 - [ ] ECSオートスケーリング
 - [ ] CloudWatchメトリクスベースのスケーリング
-
-### 8. 高度な監視
-
-#### T. X-Rayモジュール (`modules/observability/xray/`)
-- [ ] X-Rayサービス設定
-- [ ] 分散トレーシング
 
 ## 実装順序の推奨
 
@@ -150,10 +137,8 @@
 3. バックアップ
 
 ### フェーズ5: 拡張機能
-1. EFS
-2. Lambda
-3. Auto Scaling
-4. X-Ray
+1. Lambda
+2. Auto Scaling
 
 ## 完了の定義
 
