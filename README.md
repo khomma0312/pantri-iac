@@ -2,6 +2,66 @@
 
 このリポジトリは、AWSでスケーラブルなNext.jsアプリケーションインフラをデプロイするためのTerraform設定ファイルを含んでいます。
 
+## プロジェクト構成
+
+```
+pantri-iac/
+├── environments/
+│   ├── dev/
+│   │   ├── main.tf           # 開発環境のメイン設定
+│   │   ├── variables.tf      # 開発環境の変数定義
+│   │   ├── outputs.tf        # 開発環境の出力値
+│   │   └── terraform.tfvars  # 開発環境の変数値
+│   └── prod/
+│       ├── main.tf           # 本番環境のメイン設定
+│       ├── variables.tf      # 本番環境の変数定義
+│       ├── outputs.tf        # 本番環境の出力値
+│       └── terraform.tfvars  # 本番環境の変数値
+├── modules/                   # 共通モジュール
+│   ├── network/               # ネットワーク関連
+│   │   ├── vpc/               # VPC、サブネット、ルーティング
+│   │   ├── load-balancer/     # ALB、NLB
+│   │   └── security-groups/   # セキュリティグループ
+│   ├── compute/               # 計算リソース関連
+│   │   ├── ecs/               # ECSクラスター、サービス、タスク
+│   │   ├── lambda/            # Lambda関数
+│   │   └── auto-scaling/      # オートスケーリンググループ
+│   ├── database/              # データベース関連
+│   │   └── rds/               # RDS PostgreSQL/MySQL
+│   ├── storage/               # ストレージ関連
+│   │   ├── s3/                # S3バケット、ポリシー
+│   │   ├── efs/               # EFS ファイルシステム
+│   │   └── backup/            # AWS Backup
+│   ├── security/              # セキュリティ関連
+│   │   ├── iam/               # IAMロール、ポリシー
+│   │   ├── cognito/           # Cognito User Pool
+│   │   ├── acm/               # SSL/TLS証明書
+│   │   └── secrets-manager/   # Secrets Manager
+│   ├── observability/         # 監視・観測関連
+│   │   ├── cloudwatch/        # CloudWatch Logs、メトリクス
+│   │   ├── datadog/           # Datadog統合
+│   │   └── xray/              # AWS X-Ray
+│   └── content-delivery/      # コンテンツ配信関連
+│       ├── cloudfront/        # CloudFront
+│       ├── route53/           # DNS、ヘルスチェック
+│       └── waf/               # Web Application Firewall
+├── CLAUDE.md                 # プロジェクトコンテキストとコマンド
+└── README.md                 # プロジェクト概要とセットアップ手順
+```
+
+### 環境分離
+- **environments/dev/**: 開発環境用の設定（小さなリソース、低コスト）
+- **environments/prod/**: 本番環境用の設定（高可用性、パフォーマンス重視）
+
+### モジュール構成
+- **modules/vpc/**: ネットワーク基盤（VPC、サブネット、ルーティング）
+- **modules/ecs/**: コンテナオーケストレーション（ECSクラスター、サービス、タスク）
+- **modules/alb/**: 負荷分散（Application Load Balancer、ターゲットグループ）
+- **modules/cloudfront/**: CDN（CloudFrontディストリビューション）
+- **modules/s3/**: ストレージ（S3バケット、静的ファイル）
+- **modules/cognito/**: 認証（Cognito User Pool、クライアント）
+- **modules/rds/**: データベース（RDS、セキュリティグループ）
+
 ## アーキテクチャ概要
 
 インフラには以下が含まれます：
@@ -53,12 +113,21 @@
    aws configure
    ```
 
-3. **Terraformの初期化**
+3. **環境の選択**
+   ```bash
+   # 開発環境の場合
+   cd environments/dev
+   
+   # 本番環境の場合
+   cd environments/prod
+   ```
+
+4. **Terraformの初期化**
    ```bash
    terraform init
    ```
 
-4. **インフラの確認と適用**
+5. **インフラの確認と適用**
    ```bash
    terraform plan
    terraform apply
@@ -92,14 +161,18 @@ domain_name = "example.com"
 
 ### 開発環境
 ```bash
-terraform workspace new dev
-terraform apply -var-file="dev.tfvars"
+cd environments/dev
+terraform init
+terraform plan
+terraform apply
 ```
 
 ### 本番環境
 ```bash
-terraform workspace new prod
-terraform apply -var-file="prod.tfvars"
+cd environments/prod
+terraform init
+terraform plan
+terraform apply
 ```
 
 ## コンポーネント
@@ -171,12 +244,6 @@ terraform apply -var-file="prod.tfvars"
 
 ## メンテナンス
 
-### 更新
-```bash
-terraform plan
-terraform apply
-```
-
 ### スケーリング
 **CloudWatchメトリクスベースのオートスケーリング**が設定されています：
 - CPU使用率やメモリ使用率を監視して自動的にタスク数を調整
@@ -230,13 +297,9 @@ aws logs filter-log-events --log-group-name /ecs/datadog-agent
 - 適切なCloudFrontキャッシュTTLの設定
 - ECSタスクサイズの監視と調整
 
-## 貢献
+## コントリビュート
 
 1. 機能ブランチを作成
-2. 変更をローカルでテスト
+2. 適切な環境ディレクトリで変更をローカルでテスト
 3. `terraform plan`で変更内容を確認
 4. プルリクエストを提出
-
-## ライセンス
-
-このプロジェクトはMITライセンスの下でライセンスされています。
