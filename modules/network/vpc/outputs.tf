@@ -143,7 +143,7 @@ output "vpc_flow_log_cloudwatch_log_group_name" {
 # VPC Endpoints
 output "vpc_endpoint_s3_id" {
   description = "The ID of VPC endpoint for S3"
-  value       = var.enable_vpc_endpoints ? aws_vpc_endpoint.s3[0].id : null
+  value       = var.enable_vpc_endpoints ? aws_vpc_endpoint.s3.id : null
 }
 
 output "vpc_endpoint_ecr_api_id" {
