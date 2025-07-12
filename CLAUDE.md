@@ -250,3 +250,14 @@ aws iam list-open-id-connect-providers
 # GitHub Actions用IAMロールの確認
 aws iam get-role --role-name GitHubActionsRole
 ```
+
+## 開発ルール
+- コミットメッセージは日本語で書く。また、以下のコミットタイトルをコミットメッセージの前に付ける。
+  - fix：修正
+  - add：機能追加
+  - change：仕様変更（removeする場合もchange）
+  - clean：整理（リファクタリング等）
+  - upgrade：バージョンアップ
+  - revert：変更取り消し
+    - 例: `add: brandモデルに◯◯メソッドを追加`
+  - docs: ドキュメントの変更
