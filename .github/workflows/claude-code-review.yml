@@ -7,7 +7,6 @@ on:
     paths:
       - "environments/**/*.tf"
       - "modules/**/*.tf"
-      - "**/*.tfvars"
 
 jobs:
   claude-review:
