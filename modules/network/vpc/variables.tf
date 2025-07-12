@@ -101,3 +101,29 @@ variable "tags" {
   default     = {}
 }
 
+variable "app_port" {
+  description = "Port number for the application"
+  type        = number
+  default     = 3000
+  validation {
+    condition     = var.app_port > 0 && var.app_port <= 65535
+    error_message = "App port must be between 1 and 65535."
+  }
+}
+
+variable "enable_rds" {
+  description = "Should be true to create RDS security group"
+  type        = bool
+  default     = true
+}
+
+variable "db_port" {
+  description = "Port number for the database"
+  type        = number
+  default     = 3306
+  validation {
+    condition     = var.db_port > 0 && var.db_port <= 65535
+    error_message = "Database port must be between 1 and 65535."
+  }
+}
+
