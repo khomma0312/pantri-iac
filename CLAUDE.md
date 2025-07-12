@@ -29,9 +29,8 @@ pantri-iac/
 │       └── versions.tf       # バージョン制約
 ├── modules/                   # 共通モジュール
 │   ├── network/               # ネットワーク関連
-│   │   ├── vpc/               # VPC、サブネット、ルーティング
-│   │   ├── load-balancer/     # ALB、NLB
-│   │   └── security-groups/   # セキュリティグループ
+│   │   ├── vpc/               # VPC、サブネット、ルーティング、セキュリティグループ
+│   │   └── load-balancer/     # ALB、NLB
 │   ├── compute/               # 計算リソース関連
 │   │   ├── ecs/               # ECSクラスター、サービス、タスク
 │   │   ├── lambda/            # Lambda関数
@@ -68,9 +67,8 @@ pantri-iac/
 ## アーキテクチャコンポーネント
 
 ### ネットワーク層 (network/)
-- **VPC**: カスタムVPC、マルチAZサブネット、ルーティング
+- **VPC**: カスタムVPC、マルチAZサブネット、ルーティング、セキュリティグループ
 - **Load Balancer**: ALB/NLBによる負荷分散
-- **Security Groups**: きめ細かいネットワークアクセス制御
 
 ### 計算リソース層 (compute/)
 - **ECS**: Fargateタスクによるコンテナオーケストレーション

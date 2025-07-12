@@ -29,9 +29,8 @@ pantri-iac/
 │       └── versions.tf       # バージョン制約
 ├── modules/                   # 共通モジュール
 │   ├── network/               # ネットワーク関連
-│   │   ├── vpc/               # VPC、サブネット、ルーティング
-│   │   ├── load-balancer/     # ALB、NLB
-│   │   └── security-groups/   # セキュリティグループ
+│   │   ├── vpc/               # VPC、サブネット、ルーティング、セキュリティグループ
+│   │   └── load-balancer/     # ALB、NLB
 │   ├── compute/               # 計算リソース関連
 │   │   ├── ecs/               # ECSクラスター、サービス、タスク
 │   │   ├── lambda/            # Lambda関数
