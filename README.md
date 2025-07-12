@@ -8,15 +8,25 @@
 pantri-iac/
 ├── environments/
 │   ├── dev/
+│   │   ├── backend.tf        # Terraformバックエンド設定
+│   │   ├── data.tf           # データソース定義
+│   │   ├── locals.tf         # ローカル値定義
 │   │   ├── main.tf           # 開発環境のメイン設定
-│   │   ├── variables.tf      # 開発環境の変数定義
 │   │   ├── outputs.tf        # 開発環境の出力値
-│   │   └── terraform.tfvars  # 開発環境の変数値
+│   │   ├── providers.tf      # プロバイダー設定
+│   │   ├── terraform.tfvars  # 開発環境の変数値
+│   │   ├── variables.tf      # 開発環境の変数定義
+│   │   └── versions.tf       # バージョン制約
 │   └── prd/
+│       ├── backend.tf        # Terraformバックエンド設定
+│       ├── data.tf           # データソース定義
+│       ├── locals.tf         # ローカル値定義
 │       ├── main.tf           # 本番環境のメイン設定
-│       ├── variables.tf      # 本番環境の変数定義
 │       ├── outputs.tf        # 本番環境の出力値
-│       └── terraform.tfvars  # 本番環境の変数値
+│       ├── providers.tf      # プロバイダー設定
+│       ├── terraform.tfvars  # 本番環境の変数値
+│       ├── variables.tf      # 本番環境の変数定義
+│       └── versions.tf       # バージョン制約
 ├── modules/                   # 共通モジュール
 │   ├── network/               # ネットワーク関連
 │   │   ├── vpc/               # VPC、サブネット、ルーティング
