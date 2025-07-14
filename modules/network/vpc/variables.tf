@@ -118,9 +118,9 @@ variable "enable_rds" {
 }
 
 variable "db_port" {
-  description = "Port number for the database"
+  description = "Port number for the database (PostgreSQL)"
   type        = number
-  default     = 3306
+  default     = 5432
   validation {
     condition     = var.db_port > 0 && var.db_port <= 65535
     error_message = "Database port must be between 1 and 65535."
