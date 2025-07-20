@@ -102,6 +102,48 @@ output "private_subnet_availability_zones" {
   value       = values(aws_subnet.private)[*].availability_zone
 }
 
+# Database Subnets
+output "database_subnet_ids" {
+  description = "List of IDs of the database subnets"
+  value       = values(aws_subnet.database)[*].id
+}
+
+output "database_subnet_arns" {
+  description = "List of ARNs of the database subnets"
+  value       = values(aws_subnet.database)[*].arn
+}
+
+output "database_subnet_cidr_blocks" {
+  description = "List of CIDR blocks of the database subnets"
+  value       = values(aws_subnet.database)[*].cidr_block
+}
+
+output "database_subnet_availability_zones" {
+  description = "List of availability zones of the database subnets"
+  value       = values(aws_subnet.database)[*].availability_zone
+}
+
+# Management Subnets
+output "management_subnet_ids" {
+  description = "List of IDs of the management subnets"
+  value       = values(aws_subnet.management)[*].id
+}
+
+output "management_subnet_arns" {
+  description = "List of ARNs of the management subnets"
+  value       = values(aws_subnet.management)[*].arn
+}
+
+output "management_subnet_cidr_blocks" {
+  description = "List of CIDR blocks of the management subnets"
+  value       = values(aws_subnet.management)[*].cidr_block
+}
+
+output "management_subnet_availability_zones" {
+  description = "List of availability zones of the management subnets"
+  value       = values(aws_subnet.management)[*].availability_zone
+}
+
 # NAT Gateways
 output "nat_gateway_ids" {
   description = "List of IDs of the NAT Gateways"
@@ -121,12 +163,22 @@ output "nat_gateway_allocation_ids" {
 # Route Tables
 output "public_route_table_id" {
   description = "ID of the public route table"
-  value       = aws_route_table.public.id
+  value       = length(aws_route_table.public) > 0 ? aws_route_table.public[0].id : null
 }
 
 output "private_route_table_ids" {
   description = "List of IDs of the private route tables"
   value       = values(aws_route_table.private)[*].id
+}
+
+output "database_route_table_ids" {
+  description = "List of IDs of the database route tables"
+  value       = values(aws_route_table.database)[*].id
+}
+
+output "management_route_table_ids" {
+  description = "List of IDs of the management route tables"
+  value       = values(aws_route_table.management)[*].id
 }
 
 # VPC Flow Logs
@@ -160,9 +212,3 @@ output "vpc_endpoint_logs_id" {
   description = "The ID of VPC endpoint for CloudWatch Logs"
   value       = var.enable_vpc_endpoints ? aws_vpc_endpoint.logs[0].id : null
 }
-
-output "vpc_endpoints_security_group_id" {
-  description = "The ID of the security group for VPC endpoints"
-  value       = var.enable_vpc_endpoints ? aws_security_group.vpc_endpoints[0].id : null
-}
-
