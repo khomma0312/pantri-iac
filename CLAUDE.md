@@ -27,33 +27,40 @@ pantri-iac/
 │       ├── terraform.tfvars  # 本番環境の変数値
 │       ├── variables.tf      # 本番環境の変数定義
 │       └── versions.tf       # バージョン制約
-├── modules/                   # 共通モジュール
-│   ├── network/               # ネットワーク関連
-│   │   ├── vpc/               # VPC、サブネット、ルーティング、セキュリティグループ
-│   │   └── load-balancer/     # ALB、NLB
-│   ├── compute/               # 計算リソース関連
-│   │   ├── ecs/               # ECSクラスター、サービス、タスク
-│   │   ├── lambda/            # Lambda関数
-│   │   └── auto-scaling/      # オートスケーリンググループ
-│   ├── database/              # データベース関連
-│   │   └── rds/               # RDS PostgreSQL/MySQL
-│   ├── storage/               # ストレージ関連
-│   │   ├── s3/                # S3バケット、ポリシー
-│   │   ├── efs/               # EFS ファイルシステム
-│   │   └── backup/            # AWS Backup
-│   ├── security/              # セキュリティ関連
-│   │   ├── iam/               # IAMロール、ポリシー
-│   │   ├── cognito/           # Cognito User Pool
+├── modules/                   # 機能別レイヤー構成
+│   ├── foundation/            # 基盤レイヤー
+│   │   ├── vpc/               # VPC、サブネット、ルーティング
+│   │   └── security-groups/   # セキュリティグループ定義
+│   ├── security/              # セキュリティレイヤー
+│   │   ├── waf/               # Web Application Firewall
 │   │   ├── acm/               # SSL/TLS証明書
-│   │   └── secrets-manager/   # Secrets Manager
-│   ├── observability/         # 監視・観測関連
-│   │   ├── cloudwatch/        # CloudWatch Logs、メトリクス
-│   │   ├── datadog/           # Datadog統合
-│   │   └── xray/              # AWS X-Ray
-│   └── content-delivery/      # コンテンツ配信関連
-│       ├── cloudfront/        # CloudFront
-│       ├── route53/           # DNS、ヘルスチェック
-│       └── waf/               # Web Application Firewall
+│   │   └── secrets-manager/   # 機密情報管理
+│   ├── compute/               # アプリケーション実行レイヤー
+│   │   ├── ecs/               # ECSクラスター、サービス、タスク
+│   │   └── alb/               # Application Load Balancer
+│   ├── data/                  # データレイヤー
+│   │   ├── rds/               # RDS PostgreSQL
+│   │   └── s3/                # S3バケット
+│   ├── auth/                  # 認証・認可レイヤー
+│   │   ├── cognito/           # Cognito User Pool
+│   │   └── iam/               # IAMロール、ポリシー
+│   ├── delivery/              # コンテンツ配信レイヤー
+│   │   ├── cloudfront/        # CloudFront CDN
+│   │   └── route53/           # DNS管理
+│   └── observability/         # 監視・運用レイヤー
+│       ├── cloudwatch/        # CloudWatch監視
+│       └── datadog/           # Datadog統合
+├── .github/
+│   └── workflows/             # CI/CDパイプライン
+│       ├── terraform-plan.yml # プルリクエスト時のplan
+│       ├── terraform-apply-dev.yml # 開発環境デプロイ
+│       ├── terraform-apply-prd.yml # 本番環境デプロイ
+│       └── security-scan.yml  # セキュリティスキャン
+├── docs/
+│   ├── requirements.md        # 要件定義
+│   ├── architecture.md        # アーキテクチャ図
+│   ├── security.md           # セキュリティガイドライン
+│   └── deployment.md         # デプロイメント手順
 ├── CLAUDE.md                 # プロジェクトコンテキストとコマンド
 └── README.md                 # プロジェクト概要とセットアップ手順
 ```
@@ -66,38 +73,34 @@ pantri-iac/
 
 ## アーキテクチャコンポーネント
 
-### ネットワーク層 (network/)
-- **VPC**: カスタムVPC、マルチAZサブネット、ルーティング、セキュリティグループ
-- **Load Balancer**: ALB/NLBによる負荷分散
+### 基盤レイヤー (foundation/)
+- **VPC**: カスタムVPC、マルチAZサブネット、ルーティング、NAT Gateway、Internet Gateway
+- **Security Groups**: ALB、ECS、RDS、VPCエンドポイント用のセキュリティグループ
 
-### 計算リソース層 (compute/)
-- **ECS**: Fargateタスクによるコンテナオーケストレーション
-- **Lambda**: サーバーレス関数実行
-- **Auto Scaling**: 需要に応じた自動スケーリング
+### セキュリティレイヤー (security/)
+- **WAF**: Webアプリケーションファイアウォール、レート制限、IPブロック
+- **ACM**: SSL/TLS証明書管理、自動更新
+- **Secrets Manager**: データベース認証情報、API キー、アプリケーション設定の安全な管理
 
-### データベース層 (database/)
-- **RDS**: PostgreSQL/MySQLによるリレーショナルDB
+### アプリケーション実行レイヤー (compute/)
+- **ECS**: Fargateタスクによるコンテナオーケストレーション、オートスケーリング
+- **ALB**: Application Load Balancer、ターゲットグループ、ヘルスチェック
 
-### ストレージ層 (storage/)
-- **S3**: 静的ファイル、ログ、バックアップの保存
-- **EFS**: 共有ファイルシステム
-- **AWS Backup**: 統合バックアップサービス
+### データレイヤー (data/)
+- **RDS**: PostgreSQL/MySQLによるリレーショナルDB、バックアップ設定
+- **S3**: 静的ファイル、ログ、バックアップの保存、ライフサイクル管理
 
-### セキュリティ層 (security/)
-- **IAM**: ロールベースアクセス制御
-- **Cognito**: ユーザー認証・認可
-- **ACM**: SSL/TLS証明書管理
-- **Secrets Manager**: 機密情報の安全な管理
+### 認証・認可レイヤー (auth/)
+- **Cognito**: ユーザー認証・認可、User Pool、Identity Pool
+- **IAM**: ロールベースアクセス制御、ECS実行ロール、タスクロール
 
-### 監視・観測層 (observability/)
-- **CloudWatch**: ログ、メトリクス、アラーム
-- **Datadog**: APM、インフラ監視、ダッシュボード
-- **X-Ray**: 分散トレーシング
+### コンテンツ配信レイヤー (delivery/)
+- **CloudFront**: グローバルCDN、キャッシュ設定、Origin Access Control
+- **Route53**: DNS管理、ヘルスチェック、レコード管理
 
-### コンテンツ配信層 (content-delivery/)
-- **CloudFront**: グローバルCDN
-- **Route53**: DNS管理、ヘルスチェック
-- **WAF**: Webアプリケーションファイアウォール
+### 監視・運用レイヤー (observability/)
+- **CloudWatch**: ログ、メトリクス、アラーム、ダッシュボード
+- **Datadog**: APM、インフラ監視、Synthetic監視、カスタムダッシュボード
 
 ## ネットワーク構成
 - **VPC**: カスタムVPCを作成し、アプリケーション専用のネットワーク環境を構築
@@ -198,10 +201,20 @@ aws s3 ls
 #### CI/CD ワークフロー
 1. 機能ブランチでTerraformファイルを変更
 2. プルリクエスト作成時に自動でterraform planを実行
-3. コードレビューと承認
-4. メインブランチへのマージで開発環境への自動デプロイ
-5. 本番環境デプロイ時は手動承認後に実行
-6. デプロイ後の自動テストとモニタリング確認
+3. セキュリティスキャン（terraform security scan）の自動実行
+4. コードレビューと承認
+5. メインブランチへのマージで開発環境への自動デプロイ
+6. 本番環境デプロイ時は手動承認後に実行
+7. デプロイ後の自動テストとモニタリング確認
+
+#### レイヤー別デプロイメント順序
+1. **foundation**: VPC、セキュリティグループ
+2. **security**: WAF、ACM、Secrets Manager
+3. **data**: RDS、S3
+4. **auth**: IAM、Cognito
+5. **compute**: ALB、ECS
+6. **delivery**: Route53、CloudFront
+7. **observability**: CloudWatch、Datadog
 
 ## 環境変数
 
