@@ -5,14 +5,6 @@ resource "aws_security_group" "alb" {
   description = "Security group for Application Load Balancer"
 
   ingress {
-    description = "HTTP from internet"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
     description = "HTTPS from internet"
     from_port   = 443
     to_port     = 443

@@ -212,5 +212,3 @@ output "vpc_endpoint_logs_id" {
   description = "The ID of VPC endpoint for CloudWatch Logs"
   value       = var.enable_vpc_endpoints ? aws_vpc_endpoint.logs[0].id : null
 }
-
-# Note: Security group outputs moved to foundation/security-groups module
