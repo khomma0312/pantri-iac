@@ -2,7 +2,8 @@ provider "aws" {
   region = local.main_region
 
   assume_role {
-    role_arn     = ""
+    # ロールが指定されていなければ、Assume Roleを使わずにローカルで実行できるようにしている
+    role_arn     = var.terraform_assume_role_arn != "" ? var.terraform_assume_role_arn : null
     session_name = "Terraform"
   }
 
@@ -16,7 +17,8 @@ provider "aws" {
   region = "us-east-1"
 
   assume_role {
-    role_arn     = ""
+    # ロールが指定されていなければ、Assume Roleを使わずにローカルで実行できるようにしている
+    role_arn     = var.terraform_assume_role_arn != "" ? var.terraform_assume_role_arn : null
     session_name = "Terraform"
   }
 
