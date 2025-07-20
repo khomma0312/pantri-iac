@@ -1,7 +1,7 @@
 # Security Group for Application Load Balancer (ALB)
 resource "aws_security_group" "alb" {
   name_prefix = "${var.environment}-${var.app_name}-alb-"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.vpc_id
   description = "Security group for Application Load Balancer"
 
   ingress {
@@ -41,24 +41,8 @@ resource "aws_security_group" "alb" {
 # Security Group for ECS Tasks
 resource "aws_security_group" "ecs" {
   name_prefix = "${var.environment}-${var.app_name}-ecs-"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.vpc_id
   description = "Security group for ECS tasks"
-
-  ingress {
-    description     = "HTTP from ALB"
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
-    security_groups = [aws_security_group.alb.id]
-  }
-
-  ingress {
-    description     = "HTTPS from ALB"
-    from_port       = 443
-    to_port         = 443
-    protocol        = "tcp"
-    security_groups = [aws_security_group.alb.id]
-  }
 
   ingress {
     description     = "Custom app port from ALB"
@@ -91,7 +75,7 @@ resource "aws_security_group" "rds" {
   count = var.enable_rds ? 1 : 0
 
   name_prefix = "${var.environment}-${var.app_name}-rds-"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.vpc_id
   description = "Security group for RDS database"
 
   ingress {
@@ -119,7 +103,7 @@ resource "aws_security_group" "vpc_endpoints" {
   count = var.enable_vpc_endpoints ? 1 : 0
 
   name_prefix = "${var.environment}-${var.app_name}-vpc-endpoints-"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.vpc_id
   description = "Security group for VPC endpoints"
 
   ingress {
@@ -127,7 +111,7 @@ resource "aws_security_group" "vpc_endpoints" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = [aws_vpc.main.cidr_block]
+    cidr_blocks = [var.vpc_cidr]
   }
 
   egress {
