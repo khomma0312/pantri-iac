@@ -4,7 +4,7 @@ resource "aws_acm_certificate" "cloudfront" {
   provider = aws.us_east_1
 
   domain_name               = var.domain_name
-  subject_alternative_names = var.subject_alternative_names
+  subject_alternative_names = var.cloudfront_subject_alternative_names
   validation_method         = var.validation_method
 
   lifecycle {
@@ -23,7 +23,7 @@ resource "aws_acm_certificate" "cloudfront" {
 # ALB Certificate (local region)
 resource "aws_acm_certificate" "alb" {
   domain_name               = var.domain_name
-  subject_alternative_names = var.subject_alternative_names
+  subject_alternative_names = var.alb_subject_alternative_names
   validation_method         = var.validation_method
 
   lifecycle {

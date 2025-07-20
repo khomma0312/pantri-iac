@@ -18,16 +18,29 @@ variable "domain_name" {
   }
 }
 
-variable "subject_alternative_names" {
-  description = "Subject Alternative Names for the certificate"
+variable "cloudfront_subject_alternative_names" {
+  description = "Subject Alternative Names for the CloudFront certificate"
   type        = list(string)
   default     = []
 
   validation {
-    condition = length(var.subject_alternative_names) == 0 || alltrue([
-      for san in var.subject_alternative_names : can(regex("^[a-z0-9.-]+$", san))
+    condition = length(var.cloudfront_subject_alternative_names) == 0 || alltrue([
+      for san in var.cloudfront_subject_alternative_names : can(regex("^[a-z0-9.-]+$", san))
     ])
-    error_message = "All subject alternative names must be valid hostnames."
+    error_message = "All CloudFront subject alternative names must be valid hostnames."
+  }
+}
+
+variable "alb_subject_alternative_names" {
+  description = "Subject Alternative Names for the ALB certificate"
+  type        = list(string)
+  default     = []
+
+  validation {
+    condition = length(var.alb_subject_alternative_names) == 0 || alltrue([
+      for san in var.alb_subject_alternative_names : can(regex("^[a-z0-9.-]+$", san))
+    ])
+    error_message = "All ALB subject alternative names must be valid hostnames."
   }
 }
 
