@@ -24,8 +24,10 @@ variable "subject_alternative_names" {
   default     = []
 
   validation {
-    condition     = can(regex("^[a-z0-9.-]+$", var.domain_name))
-    error_message = "Domain name must be a valid hostname."
+    condition = length(var.subject_alternative_names) == 0 || alltrue([
+      for san in var.subject_alternative_names : can(regex("^[a-z0-9.-]+$", san))
+    ])
+    error_message = "All subject alternative names must be valid hostnames."
   }
 }
 
