@@ -148,24 +148,6 @@ Phase 7: observability (cloudwatch, datadog)
 Phase 8: CI/CD automation
 ```
 
-## 移行に関する注意事項
-
-### 既存VPCモジュールからの移行
-現在の`modules/network/vpc/`は既にセキュリティグループを含んでいるため、以下の対応が必要：
-
-1. **セキュリティグループの分離**: 
-   - `modules/network/vpc/security-group.tf` → `modules/foundation/security-groups/`
-   - 出力値の調整（`aws_security_group.alb`、`aws_security_group.ecs`、`aws_security_group.rds`）
-
-2. **モジュール参照の更新**:
-   - `environments/dev/main.tf`、`environments/prd/main.tf`の参照パス変更
-   - `modules/network/vpc` → `modules/foundation/vpc`
-
-3. **段階的移行**:
-   - まずVPCモジュールを`foundation/vpc/`に移動
-   - セキュリティグループを`foundation/security-groups/`に分離
-   - 他のモジュールを順次実装
-
 ## 完了の定義
 
 各モジュールは以下を含む必要があります:
