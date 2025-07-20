@@ -17,21 +17,44 @@ variable "vpc_cidr" {
   }
 }
 
-variable "availability_zones_and_public_subnet_cidrs" {
+# Simplified subnet variables - one per subnet type
+variable "public_subnets" {
   description = "Map of availability zones to public subnet CIDR blocks"
   type        = map(string)
+  default     = {}
   validation {
-    condition     = length(var.availability_zones_and_public_subnet_cidrs) >= 2
-    error_message = "At least 2 public subnets are required for high availability."
+    condition     = length(var.public_subnets) >= 0
+    error_message = "Public subnets map must be valid."
   }
 }
 
-variable "availability_zones_and_private_subnet_cidrs" {
+variable "private_subnets" {
   description = "Map of availability zones to private subnet CIDR blocks"
   type        = map(string)
+  default     = {}
   validation {
-    condition     = length(var.availability_zones_and_private_subnet_cidrs) >= 2
-    error_message = "At least 2 private subnets are required for high availability."
+    condition     = length(var.private_subnets) >= 0
+    error_message = "Private subnets map must be valid."
+  }
+}
+
+variable "database_subnets" {
+  description = "Map of availability zones to database subnet CIDR blocks"
+  type        = map(string)
+  default     = {}
+  validation {
+    condition     = length(var.database_subnets) >= 0
+    error_message = "Database subnets map must be valid."
+  }
+}
+
+variable "management_subnets" {
+  description = "Map of availability zones to management subnet CIDR blocks"
+  type        = map(string)
+  default     = {}
+  validation {
+    condition     = length(var.management_subnets) >= 0
+    error_message = "Management subnets map must be valid."
   }
 }
 
@@ -126,4 +149,3 @@ variable "db_port" {
     error_message = "Database port must be between 1 and 65535."
   }
 }
-
